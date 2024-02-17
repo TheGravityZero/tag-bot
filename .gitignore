@@ -1,0 +1,5 @@
+.vscode
+__pycache__
+.env
+my_base.db
+venv

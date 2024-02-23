@@ -24,6 +24,16 @@ from common.bot_cmds_list import private
 bot = Bot(token=os.getenv('TOKEN'), parse_mode=ParseMode.HTML)
 bot.my_admins_list = []
 
+
+description = """
+Привет! Меня зовут Кристина, я креатор, создаю контент для блогеров и брендов
+
+Вместе с командой мы отобрали для вас более 200 стильных мест и разместили их на сайте https://tag-location.ru и в закрытом телеграм-канале.
+
+Где удобнее - там и пользуетесь!
+"""
+
+
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
@@ -49,7 +59,7 @@ async def main():
     dp.shutdown.register(on_shutdown)
 
     dp.update.middleware(DataBaseSession(session_pool=session_maker))
-
+    await bot.set_my_description(description)
     await bot.delete_webhook(drop_pending_updates=True)
     # await bot.delete_my_commands(scope=types.BotCommandScopeAllPrivateChats())
     await bot.set_my_commands(commands=private, scope=types.BotCommandScopeAllPrivateChats())

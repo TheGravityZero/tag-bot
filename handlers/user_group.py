@@ -4,7 +4,6 @@ from aiogram import F, Bot, types, Router
 from aiogram.filters import Command
 
 from filters.chat_types import ChatTypeFilter
-from common.restricted_words import restricted_words
 
 
 user_group_router = Router()

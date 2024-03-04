@@ -73,7 +73,8 @@ async def subscriptions_cmd(message: types.Message, bot: Bot):
     description="Подписка действует с даты списания средств",
     provider_token=os.getenv('PAYMENTS_PROVIDER_TOKEN'),
     currency='RUB',
-    need_phone_number=True,
+    #need_phone_number=True,
+    need_email=True,
     is_flexible=False, 
     prices=[invoice],
     start_parameter='test',
@@ -96,7 +97,8 @@ async def sub_3_months_cmd(message: types.Message, bot: Bot, session: AsyncSessi
     description="Подписка действует с даты списания средств",
     provider_token=os.getenv('PAYMENTS_PROVIDER_TOKEN'),
     currency='RUB',
-    need_phone_number=True,
+    #need_phone_number=True,
+    need_email=True,
     is_flexible=False,
     prices=[invoice],
     start_parameter='test',
@@ -106,7 +108,7 @@ async def sub_3_months_cmd(message: types.Message, bot: Bot, session: AsyncSessi
 
 @user_private_router.message(F.text.lower() == "условия")
 async def shipping_cmd(message: types.Message):
-    text = "Контакты: @taglocation"
+    text = texts["conditions"]
     await message.answer(text)
 
 
@@ -125,7 +127,8 @@ async def process_payment(message: types.Message, session: AsyncSession):
             "id": message.from_user.id,
             "first_name": message.from_user.first_name,
             "last_name": message.from_user.last_name,
-            "phone": message.successful_payment.order_info.phone_number,
+            #"phone": message.successful_payment.order_info.phone_number,
+            "email": message.successful_payment.order_info.email,
             "subscribe": True,
             "start": message.date
         }

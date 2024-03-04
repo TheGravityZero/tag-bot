@@ -14,6 +14,7 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(String(150), nullable=True)
     last_name: Mapped[str] = mapped_column(String(150), nullable=True)
     phone: Mapped[str] = mapped_column(String(13), nullable=True)
+    email: Mapped[str] = mapped_column(String(150), nullable=True)
     subscribe: Mapped[bool]
     start: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     end: Mapped[DateTime] = mapped_column(DateTime, default=func.now())

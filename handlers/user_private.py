@@ -109,7 +109,7 @@ async def sub_3_months_cmd(message: types.Message, bot: Bot, session: AsyncSessi
 @user_private_router.message(F.text.lower() == "условия")
 async def shipping_cmd(message: types.Message):
     text = texts["conditions"]
-    await message.answer(text)
+    await message.answer(text, parse_mode='Markdown')
 
 
 @user_private_router.pre_checkout_query()

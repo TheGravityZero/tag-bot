@@ -116,33 +116,34 @@ async def shipping_cmd(message: types.Message):
 
 
 @user_private_router.pre_checkout_query()
-async def pre_checkout_query_handler(query: types.PreCheckoutQuery, bot: Bot):
-    await bot.answer_pre_checkout_query(query.id, ok=True)
+async def pre_checkout_query_handler(query: types.PreCheckoutQuery, bot: Bot, session: AsyncSession):
+    print(query)
+    user = await orm_get_user(session, query.from_user.id)
+    if user is not None and user.subscribe:
+        await bot.answer_pre_checkout_query(query.id, ok=False, error_message="Вы уже подписаны")
+    else:
+        await bot.answer_pre_checkout_query(query.id, ok=True)
 
 
 @user_private_router.message(F.successful_payment)
 async def process_payment(message: types.Message, session: AsyncSession):
-    print(message)
-    user = await orm_get_user(session, message.from_user.id)
-    if user is not None and user.subscribe:
-        message.answer("Вы уже подписаны.")
+    data = {
+        "id": message.from_user.id,
+        "first_name": message.from_user.first_name,
+        "last_name": message.from_user.last_name,
+        "phone": message.successful_payment.order_info.phone_number,
+        "email": message.successful_payment.order_info.email,
+        "subscribe": True,
+        "start": message.date
+    }
+    if message.successful_payment.invoice_payload=="months":
+        data["end"] = message.date + timedelta(days=90)
     else:
-        data = {
-            "id": message.from_user.id,
-            "first_name": message.from_user.first_name,
-            "last_name": message.from_user.last_name,
-            "phone": message.successful_payment.order_info.phone_number,
-            "email": message.successful_payment.order_info.email,
-            "subscribe": True,
-            "start": message.date
-        }
-        if message.successful_payment.invoice_payload=="months":
-            data["end"] = message.date + timedelta(days=90)
-        else:
-            data["end"] = message.date + timedelta(days=30)
-        await orm_add_user(session, data)
-        text = texts["successful_payment"]
-        await message.answer(text + os.getenv('INVITE_LINK'))
+        data["end"] = message.date + timedelta(days=30)
+    
+    await orm_add_user(session, data)
+    text = texts["successful_payment"]
+    await message.answer(text + os.getenv('INVITE_LINK'))
 
 
 @user_private_router.chat_join_request(F.chat.id==int(os.getenv('CHANNEL_ID')))

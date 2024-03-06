@@ -65,7 +65,7 @@ async def about_cmd(message: types.Message):
 @user_private_router.message(F.text.lower() == "доступ на 1 счастливый месяц")
 async def subscriptions_cmd(message: types.Message, bot: Bot): 
     text = texts["month"]
-    invoice = types.LabeledPrice(label='RUB', amount=10000)
+    invoice = types.LabeledPrice(label='RUB', amount=49900)
     photo_path = r"images\\month.png"
     photo = types.FSInputFile(photo_path)
 
@@ -89,7 +89,7 @@ async def subscriptions_cmd(message: types.Message, bot: Bot):
 async def sub_3_months_cmd(message: types.Message, bot: Bot, session: AsyncSession):
     text = texts["months"]
     
-    invoice = types.LabeledPrice(label='RUB', amount=10000)
+    invoice = types.LabeledPrice(label='RUB', amount=99900)
     photo_path = r"images\\months.png"
     photo = types.FSInputFile(photo_path)
     

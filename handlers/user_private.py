@@ -1,5 +1,5 @@
 import os
-
+import time
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv(), override=True)
 
@@ -51,6 +51,9 @@ async def locations_cmd(message: types.Message, session: AsyncSession):
     doc_path = r"images\\prize.pdf"
     doc = types.FSInputFile(doc_path)
     await message.answer_document(doc)
+    time.sleep(60)
+    text = texts["about"]
+    await message.answer(text, parse_mode='Markdown')
 
 
 @user_private_router.message(F.text.lower() == "хочу в закрытый тг")
@@ -138,7 +141,8 @@ async def process_payment(message: types.Message, session: AsyncSession):
         else:
             data["end"] = message.date + timedelta(days=30)
         await orm_add_user(session, data)
-        await message.answer(f"Сслыка в закрытый тг канал {os.getenv('INVITE_LINK')}")
+        text = texts["successful_payment"]
+        await message.answer(text + os.getenv('INVITE_LINK'))
 
 
 @user_private_router.chat_join_request(F.chat.id==int(os.getenv('CHANNEL_ID')))

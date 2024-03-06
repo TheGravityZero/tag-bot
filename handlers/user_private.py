@@ -119,6 +119,7 @@ async def pre_checkout_query_handler(query: types.PreCheckoutQuery, bot: Bot):
 
 @user_private_router.message(F.successful_payment)
 async def process_payment(message: types.Message, session: AsyncSession):
+    print(message)
     user = await orm_get_user(session, message.from_user.id)
     if user is not None and user.subscribe:
         message.answer("Вы уже подписаны.")
@@ -127,7 +128,7 @@ async def process_payment(message: types.Message, session: AsyncSession):
             "id": message.from_user.id,
             "first_name": message.from_user.first_name,
             "last_name": message.from_user.last_name,
-            #"phone": message.successful_payment.order_info.phone_number,
+            "phone": message.successful_payment.order_info.phone_number,
             "email": message.successful_payment.order_info.email,
             "subscribe": True,
             "start": message.date

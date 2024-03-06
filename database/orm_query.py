@@ -23,6 +23,7 @@ async def orm_add_user(session: AsyncSession, data: dict):
         last_name=data["last_name"],
         subscribe=data["subscribe"],
         phone=data["phone"],
+        email=data["email"],
         end=data["end"],
         start=data["start"]
     )
